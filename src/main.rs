@@ -1,9 +1,9 @@
-use warp::Filter;
+use web_app_with_rust::{init_db, users_api};
 
 #[tokio::main]
 async fn main() {
-    // GET /hello/warp => 200 OK with body "Hello, warp!"
-    let hello = warp::path!("hello" / String).map(|name| format!("Hello, {}!", name));
-
-    warp::serve(hello).run(([127, 0, 0, 1], 3030)).await;
+    let database = init_db();
+    warp::serve(users_api(database))
+        .run(([127, 0, 0, 1], 3030))
+        .await;
 }
